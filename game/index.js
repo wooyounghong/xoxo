@@ -23,15 +23,6 @@ export const move = (turn, pos) => {
 };
 
 export const streak = (board, firstCoord, ...remainingCoords) => {
-  // remainingCoords = [[1, 1], [2,2]]
-  // if (!board[firstCoord[0]] || !board[firstCoord[0]][firstCoord[1]]) {
-  //   console.log(board);
-  //   console.log(firstCoord);
-  //   console.log(typeof firstCoord[0]);
-  //   console.log(board.getIn(firstCoord));
-  //   console.log('first');
-  //   return undefined;
-  // }
   const value1 = board.getIn(firstCoord);
   const triple = remainingCoords.every(coords => {
     return board.getIn(coords) === value1;
