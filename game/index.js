@@ -6,17 +6,40 @@ export default function reducer(
 ) {
   switch (action.type) {
     case 'MOVE':
+      if (bad(state, action)) {
+        return  Object.assign({}, state, {error: bad(state, action)})
+      }
+      const newTurn = turnReducer(action.turn);
+
       let newBoard = state.board.setIn(action.position, action.turn);
       // do we need action.turn?
       let winnerFunc = winner(newBoard);
-      console.log(winnerFunc);
-      return state.turn === 'X'
-        ? { board: newBoard, turn: 'O', winner: winnerFunc }
-        : { board: newBoard, turn: 'X', winner: winnerFunc };
+      // console.log(winnerFunc);
+      return {board: newBoard, turn: newTurn, winner: winnerFunc } 
     default:
       return state;
   }
+};
+
+
+function bad(state, action) {
+  if (state.board.hasIn(action.position)) {
+    return 'spot taken';
+  } else if ((0 > action.position[0] == action.position[0] > 2) && (0 > action.position[1] == action.position[1] > 2)) {
+    return false;
+  } else {
+    return 'spot is off the board'
+  }
 }
+
+
+function turnReducer(turn='X') {
+  return turn === 'X' ? 'O' : 'X';
+}
+
+
+
+
 
 export const move = (turn, pos) => {
   return { type: 'MOVE', position: pos, turn };
